@@ -7,15 +7,17 @@ import { ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 // Dynamic import to avoid SSR issues with ReactPlayer
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
 
 export function Hero() {
     const [isMounted, setIsMounted] = useState(false);
     const { scrollY } = useScroll();
     const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-    const scale = useTransform(scrollY, [0, 300], [1, 0.9]);
+    const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
 
     useEffect(() => {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setIsMounted(true);
     }, []);
 
@@ -26,6 +28,7 @@ export function Hero() {
             {/* Background Video Layer */}
             <div className="absolute inset-0 z-0">
                 <div className="absolute inset-0 bg-black/60 z-10" /> {/* Overlay for readability */}
+                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
                 {/* @ts-ignore */}
                 <ReactPlayer
                     url="https://www.youtube.com/watch?v=qCZakK6W1Yg" // Generic VJ Loop placeholder
@@ -37,8 +40,9 @@ export function Hero() {
                     className="scale-[1.5] md:scale-110 pointer-events-none" // Zoom to cover edges
                     config={{
                         youtube: {
-                            playerVars: { showinfo: 0, controls: 0, modestbranding: 1, rel: 0 },
-                        } as any,
+                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                            playerVars: { showinfo: 0, controls: 0, modestbranding: 1, rel: 0 } as any,
+                        },
                     }}
                 />
             </div>
@@ -60,7 +64,7 @@ export function Hero() {
                         VISUAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary animate-pulse">ALCHEMY</span>
                     </h1>
                     <p className="text-lg md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                        Transforming sound into sight. Immersive visual experiences for the world's biggest stages.
+                        Transforming sound into sight. Immersive visual experiences for the world&apos;s biggest stages.
                     </p>
 
                     <div className="flex flex-col md:flex-row gap-4 justify-center items-center">

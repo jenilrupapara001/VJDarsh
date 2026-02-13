@@ -1,5 +1,5 @@
 import { Calendar, MapPin } from "lucide-react";
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
 const PAST_EVENTS = [
@@ -39,7 +39,7 @@ export function Performances() {
                             Recent <span className="text-secondary">Performances</span>
                         </h2>
                         <p className="text-gray-400 max-w-xl">
-                            A curated list of events where I've brought the visuals to life.
+                            A curated list of events where I&apos;ve brought the visuals to life.
                         </p>
                     </div>
                     <Button variant="link" className="text-white">View All Archive &rarr;</Button>

@@ -1,6 +1,4 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 
 export function About() {
     return (
@@ -31,7 +29,7 @@ export function About() {
                         </h2>
                         <div className="space-y-4 text-gray-400 text-lg leading-relaxed">
                             <p>
-                                I don't just play videos; I create atmospheres. With over 5 years of experience in live visual performance, I treat the screen as an instrument, jamming in real-time to the beat of the music.
+                                I don&apos;t just play videos; I create atmospheres. With over 5 years of experience in live visual performance, I treat the screen as an instrument, jamming in real-time to the beat of the music.
                             </p>
                             <p>
                                 From underground warehouse raves to massive festival stages, my visual style blends <span className="text-white font-semibold">glitch art</span>, <span className="text-white font-semibold">3D motion graphics</span>, and <span className="text-white font-semibold">generative design</span> to tell a story that transcends the auditory experience.

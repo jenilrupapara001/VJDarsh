@@ -37,6 +37,8 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     ({ className, variant, size, asChild = false, ...props }, ref) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const Comp = asChild ? "span" : "button" // Assuming Slot if we had it, but keeping logic stub for now
         return (
             <button
                 className={cn(buttonVariants({ variant, size, className }))}

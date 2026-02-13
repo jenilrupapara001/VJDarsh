@@ -1,9 +1,7 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "framer-motion";
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"; // Need to create Dialog component or use a simple modal
-import { X, ExternalLink, Play } from "lucide-react";
+import { Play } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 
 // Mock Data
