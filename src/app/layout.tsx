@@ -11,8 +11,31 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "VJ Portfolio | Digital Performance",
-  description: "Professional VJ Portfolio featuring live performances, visual mixing, and event highlights.",
+  title: "VJ Darsh | Digital Performance & Visual Alchemy",
+  description: "Official portfolio of VJ Darsh. Immersive visual experiences, live performance visuals, 3D motion graphics, and stage design for festivals and events.",
+  keywords: ["VJ", "Visual Jockey", "Live Visuals", "Motion Graphics", "Festival Visuals", "Stage Design", "Projection Mapping", "TouchDesigner"],
+  authors: [{ name: "VJ Darsh" }],
+  openGraph: {
+    title: "VJ Darsh | Digital Performance",
+    description: "Transforming sound into sight. Immersive visual experiences for the world's biggest stages.",
+    url: "https://vjdarsh.com",
+    siteName: "VJ Darsh Portfolio",
+    images: [
+      {
+        url: "https://vjdarsh.com/og-image.jpg", // Placeholder
+        width: 1200,
+        height: 630,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "VJ Darsh | Digital Performance",
+    description: "Transforming sound into sight. Immersive visual experiences.",
+    creator: "@vjdarsh",
+  },
 };
 
 export default function RootLayout({

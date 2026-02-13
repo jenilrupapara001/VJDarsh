@@ -1,11 +1,4 @@
-import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
-
-// We didn't create the dialog component yet in src/components/ui/dialog.tsx
-// I should create it to avoid import errors in VisualsGallery
-// But standard Radix UI Dialog is complex to scaffold from scratch without `shadcn-ui init`
-// I will create a simplified version using standard Radix or just CSS modal for now?
-// Or I can just omit the Dialog import from `VisualsGallery` for this step since I commented it out/didn't actually use it in the JSX of VisualsGallery yet (oh wait I imported it).
-// Let's create `src/components/ui/dialog.tsx` properly.
+"use client"
 
 import * as React from "react"
 import * as DialogPrimitive from "@radix-ui/react-dialog"
