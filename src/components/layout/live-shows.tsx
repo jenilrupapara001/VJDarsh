@@ -3,10 +3,23 @@
 import { motion } from "framer-motion";
 import { MapPin, Ticket } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LollapaloozaLogo, UltraLogo } from "@/components/ui/brand-logos";
 
 const shows = [
-    { date: "MAR 15", event: "Lollapalooza India", city: "Mumbai", venue: "Mahalakshmi Race Course" },
-    { date: "APR 02", event: "Ultra Music Festival", city: "Abu Dhabi", venue: "Yas Island" },
+    {
+        date: "MAR 15",
+        event: "Lollapalooza India",
+        city: "Mumbai",
+        venue: "Mahalakshmi Race Course",
+        Logo: LollapaloozaLogo
+    },
+    {
+        date: "APR 02",
+        event: "Ultra Music Festival",
+        city: "Abu Dhabi",
+        venue: "Yas Island",
+        Logo: UltraLogo
+    },
     { date: "MAY 18", event: "Electronic City", city: "Bangalore", venue: "Phoenix Marketcity" },
     { date: "JUN 22", event: "Echoes of Earth", city: "Goa", venue: "Vagator" },
 ];
@@ -43,7 +56,10 @@ export function LiveShows() {
                                     <span className="text-xs font-bold text-primary uppercase tracking-widest">{show.date.split(' ')[0]}</span>
                                 </div>
                                 <div>
-                                    <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{show.event}</h3>
+                                    <div className="flex items-center gap-3">
+                                        {show.Logo && <show.Logo className="w-8 h-8 text-white/20 group-hover:text-primary transition-colors" />}
+                                        <h3 className="text-xl font-bold text-white group-hover:text-primary transition-colors">{show.event}</h3>
+                                    </div>
                                     <div className="flex items-center gap-2 text-gray-500 text-sm mt-1">
                                         <MapPin className="w-3 h-3" />
                                         <span>{show.city} — {show.venue}</span>

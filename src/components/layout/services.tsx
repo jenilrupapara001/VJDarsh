@@ -1,31 +1,36 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Monitor, Cpu, Sparkles, Layers } from "lucide-react";
+import {
+    ResolumeLogo,
+    TouchDesignerLogo,
+    NotchLogo,
+    UnrealLogo
+} from "@/components/ui/brand-logos";
 
 const capabilities = [
     {
         title: "Stage Design & Live Visuals",
         description: "Creating synchronous visual narratives for arena-scale performances and music festivals globally.",
-        icon: Monitor,
+        icon: ResolumeLogo,
         tags: ["Resolume", "Notch", "Real-time Rendering"]
     },
     {
         title: "Generative Art Systems",
         description: "Building autonomous visual ecosystems using TouchDesigner and custom GLSL shaders.",
-        icon: Cpu,
+        icon: TouchDesignerLogo,
         tags: ["GLSL", "Python", "Audio-Reactive"]
     },
     {
         title: "Immersive 3D Environments",
         description: "Developing hyper-realistic digital spaces for virtual production and luxury brands.",
-        icon: Sparkles,
+        icon: UnrealLogo,
         tags: ["Unreal Engine", "Blender", "Octane"]
     },
     {
         title: "Motion Projection Mapping",
         description: "Transforming architecture into living canvas through precise spatial light orchestration.",
-        icon: Layers,
+        icon: NotchLogo,
         tags: ["MadMapper", "Spatial Design"]
     }
 ];

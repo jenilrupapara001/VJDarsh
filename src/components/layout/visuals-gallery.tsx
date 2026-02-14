@@ -4,6 +4,26 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Loader2, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
+import {
+    ResolumeLogo,
+    TouchDesignerLogo,
+    NotchLogo,
+    UnrealLogo,
+    NikeLogo,
+    BMWLogo
+} from "@/components/ui/brand-logos";
+
+const TOOL_LOGOS: Record<string, React.ComponentType<{ className?: string }>> = {
+    "Resolume": ResolumeLogo,
+    "TouchDesigner": TouchDesignerLogo,
+    "Notch": NotchLogo,
+    "Unreal Engine": UnrealLogo
+};
+
+const CLIENT_LOGOS: Record<string, React.ComponentType<{ className?: string }>> = {
+    "Nike Digital": NikeLogo,
+    "BMW Launch": BMWLogo
+};
 
 interface Project {
     _id?: string;
@@ -123,13 +143,27 @@ export function VisualsGallery() {
                                             {project.year || "2024"} — {project.category}
                                         </span>
                                         <div className="flex gap-2">
-                                            {project.toolsUsed?.slice(0, 2).map(tool => (
-                                                <span key={tool} className="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-white/60">
-                                                    {tool}
-                                                </span>
-                                            ))}
+                                            {project.toolsUsed?.slice(0, 2).map(tool => {
+                                                const ToolIcon = TOOL_LOGOS[tool];
+                                                return (
+                                                    <span key={tool} className="flex items-center gap-1.5 text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded-full text-white/60">
+                                                        {ToolIcon && <ToolIcon className="w-2.5 h-2.5" />}
+                                                        {tool}
+                                                    </span>
+                                                );
+                                            })}
                                         </div>
                                     </div>
+
+                                    {/* Client Logo Overlay (Top Left) */}
+                                    {project.client && CLIENT_LOGOS[project.client] && (
+                                        <div className="absolute top-6 left-8 opacity-0 group-hover:opacity-40 transition-opacity">
+                                            {(() => {
+                                                const ClientIcon = CLIENT_LOGOS[project.client as string];
+                                                return <ClientIcon className="w-12 h-6 text-white" />;
+                                            })()}
+                                        </div>
+                                    )}
 
                                     {/* Main Content */}
                                     <div className="absolute bottom-10 left-8 right-8">
