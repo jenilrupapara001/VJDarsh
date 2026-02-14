@@ -2,6 +2,9 @@
 
 import { motion } from "framer-motion";
 import { Hero } from "@/components/layout/hero";
+import { Services } from "@/components/layout/services";
+import { LiveShows } from "@/components/layout/live-shows";
+import { CreativeVision } from "@/components/layout/creative-vision";
 import { ReelsFeed } from "@/components/features/reels-feed";
 
 export default function Home() {
@@ -14,6 +17,9 @@ export default function Home() {
       className="flex flex-col min-h-screen"
     >
       <Hero />
+      <CreativeVision />
+      <Services />
+      <LiveShows />
       <ReelsFeed />
     </motion.div>
   );

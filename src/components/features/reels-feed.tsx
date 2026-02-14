@@ -14,7 +14,7 @@ const MOCK_REELS = [
 
 export function ReelsFeed() {
     return (
-        <section className="py-20 bg-neutral-950 border-y border-white/5">
+        <section id="feed" className="py-20 bg-neutral-950 border-y border-white/5">
             <div className="container mx-auto px-4 md:px-6 text-center">
                 <div className="flex items-center justify-center gap-2 mb-2 text-accent">
                     <Instagram className="w-6 h-6" />

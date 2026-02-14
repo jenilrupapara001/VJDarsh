@@ -10,6 +10,9 @@ export interface IProject extends Document {
     toolsUsed: string[];
     date: Date;
     featured: boolean;
+    year?: string;
+    client?: string;
+    role?: string;
 }
 
 const ProjectSchema: Schema = new Schema({
@@ -22,6 +25,9 @@ const ProjectSchema: Schema = new Schema({
     toolsUsed: { type: [String], default: [] },
     date: { type: Date, default: Date.now },
     featured: { type: Boolean, default: false },
+    year: { type: String },
+    client: { type: String },
+    role: { type: String },
 }, { timestamps: true });
 
 export default mongoose.models.Project || mongoose.model<IProject>("Project", ProjectSchema);
