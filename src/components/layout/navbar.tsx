@@ -1,95 +1,89 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { usePathname } from "next/navigation";
+import { Home, User, Briefcase, Zap, Mail } from "lucide-react";
+import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
-    const [isOpen, setIsOpen] = useState(false);
-    const [isScrolled, setIsScrolled] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsScrolled(window.scrollY > 50);
-        };
-        window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
-    }, []);
+    const pathname = usePathname();
 
     const navLinks = [
-        { name: "Home", href: "/" },
-        { name: "About", href: "#about" },
-        { name: "Performances", href: "#performances" },
-        { name: "Visuals", href: "#visuals" },
-        { name: "Contact", href: "#contact" },
+        { name: "Home", href: "/", icon: Home },
+        { name: "Work", href: "/work", icon: Briefcase },
+        { name: "Performances", href: "/performances", icon: Zap },
+        { name: "About", href: "/about", icon: User },
+        { name: "Contact", href: "/contact", icon: Mail },
     ];
 
     return (
-        <nav
-            className={cn(
-                "fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-transparent",
-                isScrolled ? "bg-black/80 backdrop-blur-md border-white/10" : "bg-transparent"
-            )}
-        >
-            <div className="container mx-auto px-4 md:px-6">
-                <div className="flex items-center justify-between h-20">
-                    {/* Logo */}
-                    <Link href="/" className="text-2xl font-bold tracking-tighter text-white">
-                        VJ <span className="text-primary">DARSH</span>
-                    </Link>
+        <>
+            {/* Desktop Floating Dock (Top) */}
+            <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 hidden md:block">
+                <motion.div
+                    initial={{ y: 100, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    className="glass-panel px-6 py-3 rounded-full flex items-center gap-2"
+                >
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        const Icon = link.icon;
 
-                    {/* Desktop Nav */}
-                    <div className="hidden md:flex items-center space-x-8">
-                        {navLinks.map((link) => (
+                        return (
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-sm font-medium text-gray-300 hover:text-white transition-colors hover:shadow-[0_0_10px_rgba(255,255,255,0.3)]"
+                                className={cn(
+                                    "relative px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 flex items-center gap-2",
+                                    isActive ? "text-white bg-white/10 shadow-[0_0_10px_rgba(255,255,255,0.2)]" : "text-gray-400 hover:text-white hover:bg-white/5"
+                                )}
                             >
-                                {link.name}
+                                <Icon className="w-4 h-4" />
+                                <span>{link.name}</span>
+                                {isActive && (
+                                    <motion.div
+                                        layoutId="activeTab"
+                                        className="absolute inset-0 rounded-full bg-white/20 border border-white/10 shadow-[0_0_20px_rgba(255,255,255,0.3)] -z-10"
+                                        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                                    />
+                                )}
                             </Link>
-                        ))}
-                        <Button variant="neon" size="sm" className="ml-4">
-                            Book Now
-                        </Button>
-                    </div>
+                        );
+                    })}
+                </motion.div>
+            </nav>
 
-                    {/* Mobile Menu Button */}
-                    <div className="md:hidden">
-                        <button
-                            onClick={() => setIsOpen(!isOpen)}
-                            className="text-gray-300 hover:text-white focus:outline-none"
-                        >
-                            {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-                        </button>
-                    </div>
-                </div>
-            </div>
+            {/* Mobile Bottom Tab Bar (iOS Style) */}
+            <nav className="fixed bottom-0 left-0 w-full z-50 md:hidden pb-safe">
+                <div className="glass-panel border-t border-white/10 flex justify-around items-center h-20 px-2 pb-2">
+                    {navLinks.map((link) => {
+                        const isActive = pathname === link.href;
+                        const Icon = link.icon;
 
-            {/* Mobile Nav */}
-            {isOpen && (
-                <div className="md:hidden bg-black/95 backdrop-blur-xl border-b border-white/10">
-                    <div className="px-4 pt-2 pb-6 space-y-2">
-                        {navLinks.map((link) => (
+                        return (
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                onClick={() => setIsOpen(false)}
-                                className="block px-3 py-2 rounded-md text-base font-medium text-gray-300 hover:text-white hover:bg-white/5"
+                                className="flex flex-col items-center justify-center w-full h-full gap-1 active:scale-90 transition-transform duration-200"
                             >
-                                {link.name}
+                                <div className={cn(
+                                    "p-1.5 rounded-xl transition-colors duration-300",
+                                    isActive ? "bg-white/10 text-primary" : "text-gray-400"
+                                )}>
+                                    <Icon className={cn("w-6 h-6", isActive && "fill-current")} />
+                                </div>
+                                <span className={cn(
+                                    "text-[10px] font-medium tracking-wide",
+                                    isActive ? "text-white" : "text-gray-500"
+                                )}>
+                                    {link.name}
+                                </span>
                             </Link>
-                        ))}
-                        <div className="pt-4">
-                            <Button variant="neon" className="w-full">
-                                Book Now
-                            </Button>
-                        </div>
-                    </div>
+                        );
+                    })}
                 </div>
-            )}
-        </nav>
+            </nav>
+        </>
     );
 }

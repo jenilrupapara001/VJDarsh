@@ -1,37 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { Send, CheckCircle } from "lucide-react";
+import { CheckCircle, Mail, MapPin, Phone, MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input"; // Need to create Input
-// import { Textarea } from "@/components/ui/textarea"; // Need to create Textarea
-
-// Quick inline Input/Textarea for speed, or I should generate them properly.
-// Let's generate them properly in the next step, for now I'll use standard HTML elements styled with Tailwind
-// actually, let's stick to the plan and create the UI components first.
 
 export function BookingForm() {
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [isSuccess, setIsSuccess] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
+    async function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
         setIsSubmitting(true);
-        // Simulate API call
-        await new Promise((resolve) => setTimeout(resolve, 1500));
-        setIsSubmitting(false);
-        setIsSuccess(true);
-    };
+        try {
+            const formData = new FormData(e.target as HTMLFormElement);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const data = Object.fromEntries(formData.entries() as any);
+            const res = await fetch("/api/booking", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data),
+            });
+            if (res.ok) setIsSuccess(true);
+        } catch (error) {
+            console.error("Error:", error);
+        } finally {
+            setIsSubmitting(false);
+        }
+    }
 
     if (isSuccess) {
         return (
-            <div className="flex flex-col items-center justify-center h-full text-center p-8 space-y-4 bg-white/5 rounded-xl border border-white/10 animate-in fade-in zoom-in">
-                <div className="w-16 h-16 rounded-full bg-green-500/20 flex items-center justify-center mb-2">
-                    <CheckCircle className="w-8 h-8 text-green-500" />
+            <div className="glass-panel p-12 rounded-3xl text-center max-w-md mx-auto animate-in fade-in zoom-in">
+                <div className="w-20 h-20 rounded-full bg-green-500/20 flex items-center justify-center mx-auto mb-6">
+                    <CheckCircle className="w-10 h-10 text-green-500" />
                 </div>
-                <h3 className="text-2xl font-bold text-white">Inquiry Received!</h3>
-                <p className="text-gray-400">I&apos;ll get back to you within 24 hours.</p>
-                <Button onClick={() => setIsSuccess(false)} variant="outline" className="mt-4">
+                <h3 className="text-3xl font-bold text-white mb-2">Message Sent!</h3>
+                <p className="text-gray-400 mb-8">I&apos;ll get back to you shortly.</p>
+                <Button onClick={() => setIsSuccess(false)} variant="outline" className="w-full glass-button">
                     Send Another
                 </Button>
             </div>
@@ -39,80 +44,78 @@ export function BookingForm() {
     }
 
     return (
-        <section id="contact" className="py-24 bg-gradient-to-t from-black to-neutral-900 border-t border-white/5">
-            <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-                <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
-                        Ready to <span className="text-primary">Collaborate?</span>
-                    </h2>
-                    <p className="text-gray-400 text-lg">
-                        Available for festivals, club nights, and touring.
-                    </p>
-                </div>
+        <section id="contact" className="py-12 md:py-24">
+            <div className="container mx-auto px-4 md:px-6">
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24">
 
-                <form onSubmit={handleSubmit} className="space-y-6 bg-white/5 p-8 md:p-12 rounded-2xl border border-white/10 backdrop-blur-sm">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Name</label>
-                            <input
-                                required
-                                type="text"
-                                placeholder="Your Name / Agency"
-                                className="flex h-12 w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            />
+                    {/* Left: Contact Info (iOS Settings style) */}
+                    <div className="space-y-8">
+                        <div>
+                            <h2 className="text-4xl md:text-6xl font-black text-white tracking-tighter mb-6">
+                                Let&apos;s <span className="text-primary">Connect</span>
+                            </h2>
+                            <p className="text-xl text-gray-400 max-w-md">
+                                Ready to bring your vision to life? Fill out the form or reach out directly.
+                            </p>
                         </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Email</label>
-                            <input
-                                required
-                                type="email"
-                                placeholder="contact@example.com"
-                                className="flex h-12 w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            />
-                        </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Event Type</label>
-                            <select className="flex h-12 w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm text-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none">
-                                <option>Festival</option>
-                                <option>Club Event</option>
-                                <option>Concert / Tour</option>
-                                <option>Corporate</option>
-                                <option>Other</option>
-                            </select>
-                        </div>
-                        <div className="space-y-2">
-                            <label className="text-sm font-medium text-gray-300">Date</label>
-                            <input
-                                type="date"
-                                className="flex h-12 w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all"
-                            />
+                        <div className="glass-panel rounded-2xl overflow-hidden divide-y divide-white/10">
+                            {[
+                                { icon: Mail, label: "Email", value: "booking@vjdarsh.com" },
+                                { icon: Phone, label: "WhatsApp", value: "+91 98765 43210" },
+                                { icon: MapPin, label: "Based in", value: "Mumbai, India" },
+                                { icon: MessageSquare, label: "Socials", value: "@vjdarsh" }
+                            ].map((item) => (
+                                <div key={item.label} className="flex items-center p-4 hover:bg-white/5 transition-colors cursor-pointer group">
+                                    <div className="w-8 h-8 rounded-lg bg-blue-500/10 flex items-center justify-center mr-4">
+                                        <item.icon className="w-4 h-4 text-blue-400" />
+                                    </div>
+                                    <span className="text-white font-medium flex-grow">{item.label}</span>
+                                    <span className="text-gray-400 group-hover:text-white transition-colors">{item.value}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
 
-                    <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-300">Message</label>
-                        <textarea
-                            required
-                            placeholder="Tell me about the project, venue, and vibe..."
-                            className="flex min-h-[120px] w-full rounded-md border border-white/10 bg-black/50 px-3 py-2 text-sm text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-y"
-                        />
+                    {/* Right: Form (Glass Panel) */}
+                    <div className="glass-panel p-8 md:p-10 rounded-3xl relative">
+                        <form onSubmit={handleSubmit} className="space-y-6">
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">NAME</label>
+                                    <input name="name" required className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" placeholder="John Doe" />
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">EMAIL</label>
+                                    <input name="email" required type="email" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" placeholder="john@example.com" />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-6">
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">TYPE</label>
+                                    <select name="eventType" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all appearance-none">
+                                        <option>Festival</option>
+                                        <option>Club Event</option>
+                                        <option>Tour</option>
+                                    </select>
+                                </div>
+                                <div className="space-y-2">
+                                    <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">DATE</label>
+                                    <input name="date" type="date" className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all" />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="text-xs font-bold text-gray-500 uppercase tracking-widest pl-1">VISION</label>
+                                <textarea name="message" required className="w-full bg-black/20 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-2 focus:ring-primary/50 transition-all min-h-[150px]" placeholder="Tell me about the vibe..." />
+                            </div>
+
+                            <Button disabled={isSubmitting} type="submit" variant="neon" size="lg" className="w-full h-14 text-lg rounded-xl shadow-lg shadow-primary/20">
+                                {isSubmitting ? "Sending..." : "Send Request"}
+                            </Button>
+                        </form>
                     </div>
-
-                    <Button disabled={isSubmitting} type="submit" variant="neon" size="lg" className="w-full text-lg h-12">
-                        {isSubmitting ? "Sending..." : (
-                            <span className="flex items-center gap-2">
-                                Send Inquiry <Send className="w-4 h-4" />
-                            </span>
-                        )}
-                    </Button>
-                </form>
-
-                <div className="mt-12 text-center text-sm text-gray-500">
-                    <p>Prefer WhatsApp? <a href="#" className="text-white hover:underline underline-offset-4">Chat +91 98765 43210</a></p>
-                    <p className="mt-1">Email: booking@vjdarsh.com</p>
                 </div>
             </div>
         </section>

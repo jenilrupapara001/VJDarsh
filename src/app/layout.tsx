@@ -38,6 +38,8 @@ export const metadata: Metadata = {
   },
 };
 
+import { CursorTorch } from "@/components/ui/cursor-torch";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -46,6 +48,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="dark">
       <body className={`${inter.variable} antialiased min-h-screen bg-background text-foreground overflow-x-hidden flex flex-col`}>
+        <CursorTorch />
         <Navbar />
         <main className="flex-grow pt-20">
           {children}

@@ -1,68 +1,160 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Play } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Loader2, ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-// Mock Data
-const PROJECTS = [
-    { id: 1, title: "Neon Genesis", category: "3D Motion", image: "bg-purple-900" },
-    { id: 2, title: "Cyberpunk City", category: "Loops", image: "bg-blue-900" },
-    { id: 3, title: "Abstract Glitch", category: "Generative", image: "bg-red-900" },
-    { id: 4, title: "Sacred Geometry", category: "Projection Mapping", image: "bg-emerald-900" },
-    { id: 5, title: "Festival Intro", category: "Live Visuals", image: "bg-orange-900" },
-    { id: 6, title: "Audio Reactive", category: "TouchDesigner", image: "bg-pink-900" },
-];
+interface Project {
+    _id?: string;
+    id?: number;
+    title: string;
+    category: string;
+    image: string;
+    mediaUrl?: string;
+    size?: "small" | "medium" | "large" | "tall";
+}
 
 export function VisualsGallery() {
+    const [projects, setProjects] = useState<Project[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [filter, setFilter] = useState("All");
+
+    useEffect(() => {
+        async function fetchProjects() {
+            try {
+                const res = await fetch("/api/projects");
+                const data = await res.json();
+                if (data.success) {
+                    // Assign random sizes for bento effect if not present
+                    const projectsWithSize = data.data.map((p: Project, i: number) => ({
+                        ...p,
+                        size: p.size || (i % 4 === 0 ? "large" : i % 3 === 0 ? "tall" : "small")
+                    }));
+                    setProjects(projectsWithSize);
+                }
+            } catch (error) {
+                console.error("Failed to fetch projects:", error);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        fetchProjects();
+    }, []);
+
+    const filteredProjects = filter === "All" ? projects : projects.filter(p => p.category.includes(filter));
+
     return (
-        <section id="visuals" className="py-24 bg-zinc-950/50">
+        <section id="visuals" className="py-12 md:py-24">
             <div className="container mx-auto px-4 md:px-6">
-                <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-4">
-                    <div className="space-y-2">
-                        <h2 className="text-3xl md:text-5xl font-bold text-white tracking-tight">
-                            Visual <span className="text-primary">Playground</span>
-                        </h2>
-                        <p className="text-gray-400 max-w-xl">
-                            Experimental loops, stage designs, and motion graphics.
+                <div className="flex flex-col md:flex-row justify-between items-end mb-12 gap-8">
+                    <div className="space-y-4">
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="text-4xl md:text-7xl font-black text-white tracking-tighter"
+                        >
+                            Visual <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">Archive</span>
+                        </motion.h1>
+                        <p className="text-gray-400 max-w-xl text-lg font-light">
+                            A collection of motion experiments, stage designs, and generative loops.
                         </p>
                     </div>
 
-                    {/* Filter categories could go here */}
-                    <div className="flex gap-2 text-sm text-gray-500">
-                        <span className="text-white font-medium cursor-pointer">All</span>
-                        <span className="hover:text-white cursor-pointer transition-colors">3D</span>
-                        <span className="hover:text-white cursor-pointer transition-colors">Generative</span>
-                        <span className="hover:text-white cursor-pointer transition-colors">Live</span>
+                    {/* iOS Segmented Control */}
+                    <div className="glass-panel p-1 rounded-xl flex gap-1">
+                        {["All", "3D", "Generative", "Live"].map((tab) => (
+                            <button
+                                key={tab}
+                                onClick={() => setFilter(tab)}
+                                className={cn(
+                                    "px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 relative",
+                                    filter === tab ? "text-white" : "text-gray-400 hover:text-white"
+                                )}
+                            >
+                                {tab}
+                                {filter === tab && (
+                                    <motion.div
+                                        layoutId="activeFilter"
+                                        className="absolute inset-0 bg-white/10 rounded-lg -z-10 shadow-[0_0_10px_rgba(255,255,255,0.1)]"
+                                    />
+                                )}
+                            </button>
+                        ))}
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {PROJECTS.map((project, index) => (
-                        <motion.div
-                            key={project.id}
-                            initial={{ opacity: 0, y: 20 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: index * 0.1 }}
-                        >
-                            <Card className="border-0 bg-transparent group cursor-pointer overflow-hidden relative">
-                                <CardContent className="p-0 aspect-video relative rounded-xl overflow-hidden">
-                                    {/* Image Placeholder */}
-                                    <div className={`w-full h-full ${project.image} transition-transform duration-700 group-hover:scale-110 flex items-center justify-center`}>
-                                        <Play className="w-12 h-12 text-white/50 group-hover:text-white transition-colors opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 duration-300" />
+                {isLoading ? (
+                    <div className="flex justify-center items-center h-64 glass-panel rounded-3xl">
+                        <Loader2 className="w-8 h-8 text-primary animate-spin" />
+                    </div>
+                ) : (
+                    <motion.div layout className="grid grid-cols-1 md:grid-cols-4 auto-rows-[200px] md:auto-rows-[250px] gap-4">
+                        <AnimatePresence>
+                            {filteredProjects.map((project) => (
+                                <motion.div
+                                    layout
+                                    key={project._id || project.id}
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    exit={{ opacity: 0, scale: 0.9 }}
+                                    transition={{ duration: 0.4 }}
+                                    className={cn(
+                                        "glass-card rounded-3xl overflow-hidden relative group cursor-pointer",
+                                        project.size === "large" && "md:col-span-2 md:row-span-2",
+                                        project.size === "tall" && "md:col-span-1 md:row-span-2",
+                                        project.size === "medium" && "md:col-span-2 md:row-span-1",
+                                        project.size === "small" && "md:col-span-1 md:row-span-1"
+                                    )}
+                                >
+                                    {/* Image Background */}
+                                    <div
+                                        className="absolute inset-0 transition-transform duration-700 group-hover:scale-105 bg-cover bg-center"
+                                        style={{ backgroundImage: `url(${project.image})` }}
+                                    />
+
+                                    {/* Gradient Overlay */}
+                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+
+                                    {/* Content */}
+                                    <div className="absolute inset-0 p-6 flex flex-col justify-between">
+                                        <div className="flex justify-between items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform -translate-y-2 group-hover:translate-y-0">
+                                            <span className="glass-panel px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider text-white/80">
+                                                {project.category}
+                                            </span>
+                                            <div className="p-2 rounded-full glass-button">
+                                                <ArrowUpRight className="w-4 h-4 text-white" />
+                                            </div>
+                                        </div>
+
+                                        <div className="transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                                            <h3 className={cn(
+                                                "font-bold text-white mb-1 leading-tight",
+                                                project.size === "large" ? "text-3xl" : "text-xl"
+                                            )}>
+                                                {project.title}
+                                            </h3>
+                                            <div className="h-0 group-hover:h-auto overflow-hidden transition-all duration-300">
+                                                <p className="text-gray-300 text-sm mt-2 opacity-0 group-hover:opacity-100 transition-opacity delay-100">
+                                                    Tap to view project details
+                                                </p>
+                                            </div>
+                                        </div>
                                     </div>
 
-                                    {/* Overlay Info */}
-                                    <div className="absolute inset-x-0 bottom-0 p-6 bg-gradient-to-t from-black/90 to-transparent translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                                        <h3 className="text-xl font-bold text-white mb-1">{project.title}</h3>
-                                        <p className="text-primary text-sm font-medium uppercase tracking-wider">{project.category}</p>
-                                    </div>
-                                </CardContent>
-                            </Card>
-                        </motion.div>
-                    ))}
-                </div>
+                                    {/* Center Play Button for large items */}
+                                    {project.size === "large" && (
+                                        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-500">
+                                            <div className="w-16 h-16 rounded-full glass-panel flex items-center justify-center backdrop-blur-md">
+                                                <Play className="w-6 h-6 text-white fill-white" />
+                                            </div>
+                                        </div>
+                                    )}
+                                </motion.div>
+                            ))}
+                        </AnimatePresence>
+                    </motion.div>
+                )}
             </div>
         </section>
     );

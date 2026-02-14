@@ -3,23 +3,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-    "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+    "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-full text-sm font-semibold ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 active:scale-95 duration-200",
     {
         variants: {
             variant: {
-                default: "bg-primary text-primary-foreground hover:bg-primary/90 shadow-[0_0_15px_rgba(112,0,255,0.5)] hover:shadow-[0_0_25px_rgba(112,0,255,0.7)]",
-                destructive: "bg-destructive text-destructive-foreground hover:bg-destructive/90",
-                outline: "border border-input bg-transparent hover:bg-accent hover:text-accent-foreground border-white/20",
-                secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
-                ghost: "hover:bg-accent hover:text-accent-foreground",
+                default: "bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90",
+                destructive: "bg-accent text-white shadow-lg shadow-accent/25 hover:bg-accent/90",
+                outline: "border border-white/20 bg-white/5 hover:bg-white/10 text-white backdrop-blur-md",
+                secondary: "bg-white/10 text-white hover:bg-white/20 backdrop-blur-md",
+                ghost: "hover:bg-white/10 text-gray-300 hover:text-white",
                 link: "text-primary underline-offset-4 hover:underline",
-                neon: "bg-transparent border border-secondary text-secondary shadow-[0_0_10px_rgba(0,240,255,0.3)] hover:bg-secondary/10 hover:shadow-[0_0_20px_rgba(0,240,255,0.6)]",
+                neon: "bg-primary text-white shadow-[0_0_20px_rgba(112,0,255,0.4)] border border-primary/50 hover:shadow-[0_0_30px_rgba(112,0,255,0.6)] hover:bg-primary/90",
             },
             size: {
-                default: "h-10 px-4 py-2",
-                sm: "h-9 rounded-md px-3",
-                lg: "h-11 rounded-md px-8",
-                icon: "h-10 w-10",
+                default: "h-11 px-6 py-2",
+                sm: "h-9 px-4 text-xs",
+                lg: "h-14 px-8 text-base",
+                icon: "h-11 w-11",
             },
         },
         defaultVariants: {

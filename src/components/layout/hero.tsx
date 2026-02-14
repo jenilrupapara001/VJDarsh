@@ -1,91 +1,89 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
-import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-
-// Dynamic import to avoid SSR issues with ReactPlayer
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const ReactPlayer = dynamic(() => import("react-player"), { ssr: false }) as any;
+import { motion } from "framer-motion";
 
 export function Hero() {
-    const [isMounted, setIsMounted] = useState(false);
-    const { scrollY } = useScroll();
-    const opacity = useTransform(scrollY, [0, 300], [1, 0]);
-    const scale = useTransform(scrollY, [0, 300], [1, 0.8]);
+    const container = {
+        hidden: { opacity: 0 },
+        show: {
+            opacity: 1,
+            transition: {
+                staggerChildren: 0.1,
+                delayChildren: 0.3,
+            },
+        },
+    };
 
-    useEffect(() => {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setIsMounted(true);
-    }, []);
-
-    if (!isMounted) return null;
+    const item = {
+        hidden: { y: 200, opacity: 0 },
+        show: {
+            y: 0,
+            opacity: 1,
+            transition: {
+                type: "spring",
+                damping: 20,
+                stiffness: 100
+            }
+        },
+    };
 
     return (
-        <section className="relative h-screen w-full overflow-hidden flex items-center justify-center bg-black">
-            {/* Background Video Layer */}
-            <div className="absolute inset-0 z-0">
-                <div className="absolute inset-0 bg-black/60 z-10" /> {/* Overlay for readability */}
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
-                <ReactPlayer
-                    url="https://www.youtube.com/watch?v=qCZakK6W1Yg" // Generic VJ Loop placeholder
-                    playing
-                    loop
-                    muted
-                    width="100%"
-                    height="100%"
-                    className="scale-[1.5] md:scale-110 pointer-events-none" // Zoom to cover edges
-                    config={{
-                        youtube: {
-                            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                            playerVars: { showinfo: 0, controls: 0, modestbranding: 1, rel: 0 } as any,
-                        },
-                    }}
-                />
+        <section className="h-screen w-full flex flex-col justify-center items-center relative overflow-hidden bg-black">
+            {/* Background Ambience */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-[20%] left-[20%] w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] mix-blend-screen animate-pulse" />
+                <div className="absolute bottom-[20%] right-[20%] w-[400px] h-[400px] bg-accent/20 rounded-full blur-[100px] mix-blend-screen animate-pulse delay-1000" />
             </div>
 
-            {/* Content Layer */}
             <motion.div
-                className="relative z-20 text-center px-4 max-w-4xl mx-auto"
-                style={{ opacity, scale }}
+                variants={container}
+                initial="hidden"
+                animate="show"
+                className="z-10 text-center flex flex-col items-center gap-2"
             >
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                >
-                    <h2 className="text-secondary tracking-[0.2em] text-sm md:text-base mb-4 uppercase font-semibold">
-                        This is Not Just a Performance
+                <motion.div variants={item} className="overflow-hidden">
+                    <h2 className="text-xl md:text-2xl font-medium tracking-[0.2em] text-gray-400 uppercase">
+                        Digital Alchemist
                     </h2>
-                    <h1 className="text-5xl md:text-8xl font-black mb-6 tracking-tighter text-white drop-shadow-2xl">
-                        VISUAL <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-secondary animate-pulse">ALCHEMY</span>
-                    </h1>
-                    <p className="text-lg md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto font-light leading-relaxed">
-                        Transforming sound into sight. Immersive visual experiences for the world&apos;s biggest stages.
-                    </p>
+                </motion.div>
 
-                    <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                        <Button variant="neon" size="lg" className="min-w-[160px] text-lg h-14">
-                            See My Work
-                        </Button>
-                        <Button variant="outline" size="lg" className="min-w-[160px] text-lg h-14 backdrop-blur-sm">
-                            Book Now
-                        </Button>
-                    </div>
+                <motion.div variants={item} className="overflow-hidden">
+                    <h1 className="text-[12vw] leading-[0.9] font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white via-white to-white/50 drop-shadow-2xl">
+                        VJ DARSH
+                    </h1>
+                </motion.div>
+
+                <motion.div variants={item} className="max-w-xl mt-8 px-6">
+                    <p className="text-lg md:text-xl text-gray-400 font-light leading-relaxed">
+                        Transforming sound into sight. Crafting immersive visual experiences
+                        for the world&apos;s biggest stages and digital dreamscapes.
+                    </p>
+                </motion.div>
+
+                <motion.div variants={item} className="mt-12 flex gap-4">
+                    <a href="#visuals" className="glass-button px-8 py-3 rounded-full text-white font-medium hover:bg-white/20 transition-all">
+                        View Work
+                    </a>
+                    <a href="/contact" className="px-8 py-3 rounded-full border border-white/10 text-white font-medium hover:bg-white/5 transition-all">
+                        Contact
+                    </a>
                 </motion.div>
             </motion.div>
 
             {/* Scroll Indicator */}
             <motion.div
-                className="absolute bottom-10 left-1/2 -translate-x-1/2 z-20"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0, y: 0 }}
                 animate={{ opacity: 1, y: [0, 10, 0] }}
-                transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                transition={{ delay: 1.5, duration: 2, repeat: Infinity }}
+                className="absolute bottom-12 z-10"
             >
-                <ChevronDown className="w-10 h-10 text-white/50" />
+                <div className="w-6 h-10 border-2 border-white/20 rounded-full flex justify-center p-1">
+                    <motion.div
+                        animate={{ y: [0, 12, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="w-1 h-3 bg-white/50 rounded-full"
+                    />
+                </div>
             </motion.div>
         </section>
     );

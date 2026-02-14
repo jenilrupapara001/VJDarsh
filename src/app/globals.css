@@ -8,42 +8,72 @@
   --color-accent: var(--accent);
   --color-muted: var(--muted);
   --color-card: var(--card);
-  
+
   --font-sans: var(--font-inter);
 }
 
 :root {
-  --background: #030014;
+  --background: #000000;
   --foreground: #ffffff;
-  --primary: #7000ff;
-  --secondary: #00f0ff;
-  --accent: #ff003c;
-  --muted: #1f1f2e;
-  --card: rgba(255, 255, 255, 0.05);
+  --primary: #2997ff;
+  /* iOS Blue */
+  --secondary: #30d158;
+  /* iOS Green */
+  --accent: #ff375f;
+  /* iOS Pink */
+  --muted: #1c1c1e;
+  --card: rgba(255, 255, 255, 0.08);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
+  background-image:
+    radial-gradient(circle at 15% 50%, rgba(41, 151, 255, 0.08), transparent 25%),
+    radial-gradient(circle at 85% 30%, rgba(255, 55, 95, 0.08), transparent 25%);
   color: var(--foreground);
-  font-family: var(--font-inter), sans-serif;
+  font-family: var(--font-inter), -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Pure Liquid Glass Utilities */
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/5 backdrop-blur-2xl border border-white/10;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+  }
+
+  .glass-card {
+    @apply bg-white/5 backdrop-blur-xl border border-white/10 transition-all duration-500 hover:bg-white/10 hover:border-white/20;
+  }
+
+  .glass-card:hover {
+    box-shadow: 0 0 40px -10px rgba(41, 151, 255, 0.3);
+  }
+
+  .glass-button {
+    @apply bg-white/10 backdrop-blur-lg border border-white/20 hover:bg-white/20 transition-all active:scale-95 shadow-sm;
+  }
+
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-blue-400 via-indigo-400 to-purple-400;
+  }
+}
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--background);
+  background: transparent;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--muted);
-  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--primary);
+  background: rgba(255, 255, 255, 0.3);
 }
