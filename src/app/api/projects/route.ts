@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
-import Project from "@/models/Project";
 
-// Fallback data if DB is not connected
 const MOCK_PROJECTS = [
     {
         id: 1,
@@ -73,29 +70,5 @@ const MOCK_PROJECTS = [
 ];
 
 export async function GET() {
-    try {
-        await dbConnect();
-        const projects = await Project.find({}).sort({ date: -1 });
-
-        if (projects.length === 0) {
-            return NextResponse.json({ success: true, data: MOCK_PROJECTS, source: "mock" });
-        }
-
-        return NextResponse.json({ success: true, data: projects, source: "database" });
-    } catch (error) {
-        console.error("Database Error:", error);
-        // Fallback to mock data on error (e.g. invalid URI)
-        return NextResponse.json({ success: true, data: MOCK_PROJECTS, source: "fallback" });
-    }
-}
-
-export async function POST(request: Request) {
-    try {
-        await dbConnect();
-        const body = await request.json();
-        const project = await Project.create(body);
-        return NextResponse.json({ success: true, data: project }, { status: 201 });
-    } catch (error) {
-        return NextResponse.json({ success: false, error: (error as Error).message }, { status: 400 });
-    }
+    return NextResponse.json({ success: true, data: MOCK_PROJECTS, source: "static" });
 }

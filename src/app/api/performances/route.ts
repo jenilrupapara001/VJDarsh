@@ -1,6 +1,4 @@
 import { NextResponse } from "next/server";
-import dbConnect from "@/lib/db";
-import Performance from "@/models/Performance";
 
 const MOCK_PERFORMANCES = [
     {
@@ -30,28 +28,5 @@ const MOCK_PERFORMANCES = [
 ];
 
 export async function GET() {
-    try {
-        await dbConnect();
-        const performances = await Performance.find({}).sort({ date: -1 });
-
-        if (performances.length === 0) {
-            return NextResponse.json({ success: true, data: MOCK_PERFORMANCES, source: "mock" });
-        }
-
-        return NextResponse.json({ success: true, data: performances, source: "database" });
-    } catch (error) {
-        console.error("Database Error:", error);
-        return NextResponse.json({ success: true, data: MOCK_PERFORMANCES, source: "fallback" });
-    }
-}
-
-export async function POST(request: Request) {
-    try {
-        await dbConnect();
-        const body = await request.json();
-        const performance = await Performance.create(body);
-        return NextResponse.json({ success: true, data: performance }, { status: 201 });
-    } catch (error) {
-        return NextResponse.json({ success: false, error: (error as Error).message }, { status: 400 });
-    }
+    return NextResponse.json({ success: true, data: MOCK_PERFORMANCES, source: "static" });
 }
